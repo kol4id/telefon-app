@@ -1,10 +1,10 @@
-interface IMessage{
+export interface IMessage{
     id: number,
     from: number,
     content: string,
 }
 
-interface IChannel{
+export interface IChannel{
     id: number,
     title: string,
     content: string,

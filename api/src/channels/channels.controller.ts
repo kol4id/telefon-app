@@ -1,5 +1,6 @@
-import { Controller, Get, Query } from '@nestjs/common';
-import channels from './utils';
+import { Body, Controller, Get, Post} from '@nestjs/common';
+import { ChannelsService } from './channels.service';
+import { Channel } from './schemas/channels.schema';
 
 interface IMessage{
     id: number,
@@ -16,21 +17,30 @@ interface IChannel{
 
 @Controller('channels')
 export class ChannelsController {
+    constructor(private readonly channelsService: ChannelsService){}
     @Get()
     defaultResponce(){
         return 'hi there!';
     }
 
-
     @Get('all')
-    getAll(): IChannel[]{
+    getAll(): any{
         console.log('asdasdsdas');
-        return channels
+        return this.channelsService.findAll();
     }
 
-    @Get('id')
-    getById(@Query('id') id: number): IChannel{
-        console.log('returning 1 specific cat with id: ' + id);
-        return channels[2];
+    @Post()
+    createChannel(
+        @Body()
+        channel
+    ){
+        return this.channelsService.create(channel);
     }
+    // @Get('id')
+    // getById(@Query('id') id: number): IChannel{
+    //     console.log('returning 1 specific cat with id: ' + id);
+    //     const finded = this.channelsService.findChannel(id, channels);
+    //     console.log(finded);
+    //     return finded;
+    // }
 }

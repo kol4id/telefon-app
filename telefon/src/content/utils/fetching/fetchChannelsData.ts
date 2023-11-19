@@ -2,7 +2,7 @@ import { IChannel } from "../../interfaces/IChannel";
 import axios from "axios";
 
 const FetchChannelsData = async(): Promise<IChannel[]> =>{
-    const response = await axios.get<IChannel[]>('http://localhost:4200/api/cats/all');
+    const response = await axios.get<IChannel[]>('http://localhost:4200/api/channels/all');
     let data: IChannel[];
     
     if (response.status === 200) {

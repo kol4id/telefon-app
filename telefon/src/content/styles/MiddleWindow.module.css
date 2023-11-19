@@ -1,0 +1,6 @@
+.middleWindow {
+    position: relative;
+    height: 100%;  
+    background-color: rgba(30, 30, 32, 0.95) ;
+    flex: 1;
+}

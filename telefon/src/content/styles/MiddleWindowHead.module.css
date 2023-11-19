@@ -1,0 +1,11 @@
+.head{
+    display: flex;
+    height: 45px;
+    align-items: center;
+    
+    padding-left: 10px;
+
+    border-bottom: 1px solid black;
+    background-color: rgba(30, 30, 32, 0.95);
+    color:gainsboro;    
+}

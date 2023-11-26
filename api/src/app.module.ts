@@ -6,12 +6,10 @@ import { AuthModule } from './auth/auth.module';
 import { ChannelsModule } from './channels/channels.module';
 import { ConfigModule } from '@nestjs/config';
 
-
-
 @Module({
-  imports: [
-    AuthModule, 
+  imports: [ 
     ChannelsModule,
+    AuthModule,
     ConfigModule.forRoot({
       envFilePath: '.env',
       isGlobal: true,

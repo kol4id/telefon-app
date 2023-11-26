@@ -1,19 +1,12 @@
-import { Body, Controller, Get, Post} from '@nestjs/common';
+import { Body, Controller, Get, NotFoundException, Param, Post, Put, Query, Req, UseGuards} from '@nestjs/common';
 import { ChannelsService } from './channels.service';
 import { Channel } from './schemas/channels.schema';
+import { CreateChannelDto } from './dto/create-channel.dto';
+import { UpdateChannelDto } from './dto/update-channel.dto';
 
-interface IMessage{
-    id: number,
-    from: number,
-    content: string,
-}
-
-interface IChannel{
-    id: number,
-    title: string,
-    content: string,
-    messages: IMessage[],
-}
+import { Query as IQuery } from 'express-serve-static-core'; 
+import { AuthGuard } from '@nestjs/passport';
+import { FastifyRequest } from 'fastify';
 
 @Controller('channels')
 export class ChannelsController {
@@ -24,23 +17,40 @@ export class ChannelsController {
     }
 
     @Get('all')
-    getAll(): any{
-        console.log('asdasdsdas');
-        return this.channelsService.findAll();
+    async getAllChannels(@Query() query: IQuery): Promise<Channel[]>{
+        return this.channelsService.findAll(query);
+    }
+
+    @Get(':id')
+    async getChannelById(
+        @Param('id') id: string,
+    ): Promise<Channel>{
+        let channel: Channel;
+        try{
+            channel = await this.channelsService.findById(id);
+        } catch(error: unknown){
+            throw new NotFoundException('there is no such channel');
+        }
+
+        return channel
+    }
+
+    @Put(':id')
+    async updateChannelById(
+        @Param('id') id: string,
+        @Body() channel: UpdateChannelDto,
+    ): Promise<Channel>{
+        console.log(channel)
+        return this.channelsService.updateById(id, channel);
     }
 
     @Post()
-    createChannel(
-        @Body()
-        channel
-    ){
-        return this.channelsService.create(channel);
+    @UseGuards(AuthGuard())
+    async createChannel(
+        @Body() channel: CreateChannelDto,
+        @Req() req,
+    ): Promise<Channel>{
+        console.log(req.user);  
+        return this.channelsService.create(channel, req.user);
     }
-    // @Get('id')
-    // getById(@Query('id') id: number): IChannel{
-    //     console.log('returning 1 specific cat with id: ' + id);
-    //     const finded = this.channelsService.findChannel(id, channels);
-    //     console.log(finded);
-    //     return finded;
-    // }
 }

@@ -7,9 +7,7 @@ import { IMessage } from '../interfaces/IMessage';
 
 const MessageList: FunctionComponent = () =>{
 
-    // const [messages, setMessages] = useState<IMessage[]>([]);
-
-    const messages = useSelector((state:RootState) => state.currentChannel.channel.messages)
+    const messages: IMessage[] = useSelector((state:RootState) => state.currentChannel.channel.messages)
 
     return(
         <React.Fragment>
